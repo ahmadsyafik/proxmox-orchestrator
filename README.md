@@ -13,31 +13,24 @@
 
 Sistem bekerja dengan membandingkan keadaan riil (*Actual State*) setiap node Proxmox terhadap keadaan yang diinginkan (*Desired State*) yang tersimpan di `etcd`:
 
-```text
-[ Administrator / Web Native Dashboard ]
-                   │
-                   ▼
-       [ FastAPI Control Plane ]
-                   │
-                   ▼
-        [ etcd SSOT Database ]
-      (Desired State Reference)
-                   │
-     ┌─────────────┼─────────────┐
-     ▼             ▼             ▼
-[ pve1-a1 ]   [ pve-a2 ]   [ pve-a3 / pve-a4 ]
-  (Agent)       (Agent)         (Agent)
-     │             │               │
-     └─────────────┼───────────────┘
-                   │
-                   ▼
-     [ Compare State & Drift Test ]
-                   │
-        ┌──────────┴──────────┐
-        ▼                     ▼
- [ Discrepancy? YES ]  [ Discrepancy? NO ]
-        │                     │
- (Auto-Reconcile)    (Config Consistent)
-        │                     │
-        ▼                     ▼
- [ Validate MTU/Net ]  [ VM Live Migration Ready ]# proxmox-orchestrator
+```mermaid
+graph TD
+    Admin["Administrator / Web Native Dashboard"] --> ControlPlane["FastAPI Control Plane"]
+    ControlPlane --> ETCD["etcd SSOT Database<br/>(Desired State Reference)"]
+    
+    ETCD --> Node1["pve1-a1<br/>(Agent)"]
+    ETCD --> Node2["pve-a2<br/>(Agent)"]
+    ETCD --> Node3["pve-a3 / pve-a4<br/>(Agent)"]
+    
+    Node1 --> DriftTest["Compare State & Drift Test"]
+    Node2 --> DriftTest
+    Node3 --> DriftTest
+    
+    DriftTest --> Discrepancy{"Discrepancy?"}
+    
+    Discrepancy -- YES --> AutoReconcile["Auto-Reconcile"]
+    AutoReconcile --> ValidateMTU["Validate MTU/Net"]
+    
+    Discrepancy -- NO --> ConfigConsistent["Config Consistent"]
+    ConfigConsistent --> MigrationReady["VM Live Migration Ready"]
+```
