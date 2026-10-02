@@ -15,8 +15,8 @@ ETCD_PORT = "2379"
 ETCD_URL = f"http://{ETCD_HOST}:{ETCD_PORT}/v2/keys/proxmox"
 
 NODES = [
-    {"name": "pve1-a1", "ip": "10.10.10.51"},
-    {"name": "pve-a2", "ip": "10.10.10.52"}
+    {"name": "pve1-a1", "ip": "10.10.10.211"},
+    {"name": "pve-a2", "ip": "10.10.10.212"}
 ]
 
 # --------------------------------------------------------------------------
@@ -175,9 +175,9 @@ def render_dashboard():
                             <div>
                                 <label class="block text-xs font-medium text-slate-300 mb-1">IP Node Target</label>
                                 <select id="targetIp" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm text-white">
-                                    <option value="10.10.10.51">pve1-a1 (10.10.10.51)</option>
-                                    <option value="10.10.10.52">pve-a2 (10.10.10.52)</option>
-                                </select>
+                                <option value="10.10.10.211">pve1-a1 (10.10.10.211)</option>
+                                <option value="10.10.10.212">pve-a2 (10.10.10.212)</option>
+                            </select>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-slate-300 mb-1">Payload Size (Bytes)</label>
